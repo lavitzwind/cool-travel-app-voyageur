@@ -9,6 +9,7 @@ const PinSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      min: 3,
     },
     description: {
       type: String,
@@ -33,4 +34,4 @@ const PinSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Pin", PinSchema);
+export default mongoose.model("Pin", PinSchema);

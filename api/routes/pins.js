@@ -1,6 +1,7 @@
-import * as express from "express";
-const router = express.Router();
+import express from "express";
 import Pin from "../models/Pin.js";
+
+const router = express.Router();
 
 // Create a pin
 router.post("/", async (req, res) => {

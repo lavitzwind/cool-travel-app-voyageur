@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
       min: 3,
@@ -24,4 +24,4 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default model("User", UserSchema);
+export default mongoose.model("User", UserSchema);

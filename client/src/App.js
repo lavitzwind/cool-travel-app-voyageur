@@ -67,7 +67,12 @@ function App() {
         latitude={48.858093}
         offsetLeft={-20}
         offsetTop={-10}
-        onClick={() => setShowPopup(!showPopup)}
+        onClick={(e) => {
+          // If we let the click event propagates to the map, it will immediately close the popup
+          // with `closeOnClick: true`
+          e.originalEvent.stopPropagation();
+          setShowPopup(!showPopup);
+        }}
       >
         <RoomRoundedIcon
           sx={{
@@ -87,7 +92,7 @@ function App() {
           latitude={48.858093}
           anchor="bottom-right"
           focusAfterOpen={false}
-          closeOnClick={false}
+          closeOnClick={true}
           offsetTop={-10}
           offsetLeft={-20}
         >

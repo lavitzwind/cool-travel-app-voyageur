@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styled from "styled-components";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import Star from "@mui/icons-material/Star";
+import useOnClickOutside from "./hooks/useOnClickOutside";
 
 const Card = styled.div`
   display: flex;
@@ -54,6 +55,10 @@ function App() {
     zoom: 4,
   });
   const [showPopup, setShowPopup] = useState(false);
+  const ref = useRef();
+
+  useOnClickOutside(ref, () => setShowPopup(false));
+
   return (
     <Map
       initialViewState={viewState}
@@ -66,9 +71,10 @@ function App() {
         latitude={48.858093}
         offsetLeft={-20}
         offsetTop={-10}
-        onClick={() => setShowPopup(true)}
+        onClick={() => setShowPopup(!showPopup)}
       >
         <RoomRoundedIcon
+          ref={ref}
           sx={{
             color: "#417D7A",
             fontSize: viewState.zoom * 7,
@@ -80,36 +86,36 @@ function App() {
           }}
         />
       </Marker>
-      <Popup
-        longitude={2.294694}
-        latitude={48.858093}
-        anchor="bottom-right"
-        onClose={() => setShowPopup(true)}
-        focusAfterOpen={false}
-        closeOnClick={true}
-        visible={showPopup}
-        offsetTop={-10}
-        offsetLeft={-20}
-      >
-        <Card>
-          <label>Place</label>
-          <h4>Eiffell Tower</h4>
-          <label>Review</label>
-          <p>Beautiful place. I like it.</p>
-          <label>Rating</label>
-          <div>
-            <Star style={{ color: "gold" }} />
-            <Star style={{ color: "gold" }} />
-            <Star style={{ color: "gold" }} />
-            <Star style={{ color: "gold" }} />
-            <Star style={{ color: "gold" }} />
-          </div>
-          <Author>
-            Created by<b>&nbsp;Mille</b>
-          </Author>
-          <span>1 hour ago</span>
-        </Card>
-      </Popup>
+      {showPopup && (
+        <Popup
+          longitude={2.294694}
+          latitude={48.858093}
+          anchor="bottom-right"
+          focusAfterOpen={false}
+          closeOnClick={false}
+          offsetTop={-10}
+          offsetLeft={-20}
+        >
+          <Card>
+            <label>Place</label>
+            <h4>Eiffell Tower</h4>
+            <label>Review</label>
+            <p>Beautiful place. I like it.</p>
+            <label>Rating</label>
+            <div>
+              <Star style={{ color: "gold" }} />
+              <Star style={{ color: "gold" }} />
+              <Star style={{ color: "gold" }} />
+              <Star style={{ color: "gold" }} />
+              <Star style={{ color: "gold" }} />
+            </div>
+            <Author>
+              Created by<b>&nbsp;Mille</b>
+            </Author>
+            <span>1 hour ago</span>
+          </Card>
+        </Popup>
+      )}
     </Map>
   );
 }

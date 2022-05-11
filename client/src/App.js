@@ -1,10 +1,9 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styled from "styled-components";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import Star from "@mui/icons-material/Star";
-import useOnClickOutside from "./hooks/useOnClickOutside";
 
 const Card = styled.div`
   display: flex;
@@ -55,9 +54,6 @@ function App() {
     zoom: 4,
   });
   const [showPopup, setShowPopup] = useState(false);
-  const ref = useRef();
-
-  useOnClickOutside(ref, () => setShowPopup(false));
 
   return (
     <Map
@@ -74,7 +70,6 @@ function App() {
         onClick={() => setShowPopup(!showPopup)}
       >
         <RoomRoundedIcon
-          ref={ref}
           sx={{
             color: "#417D7A",
             fontSize: viewState.zoom * 7,

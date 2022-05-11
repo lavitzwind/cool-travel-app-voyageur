@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { format } from "timeago.js";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styled from "styled-components";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import Star from "@mui/icons-material/Star";
+
+const theme = {
+  author: "Crimson",
+  users: "DarkBlue",
+};
 
 const Card = styled.div`
   display: flex;
@@ -17,8 +24,8 @@ const Card = styled.div`
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #1d5c63;
-    border-bottom: 3px solid #1d5c63;
+    color: ${(props) => props.theme.author};
+    border-bottom: 3px solid;
   }
 
   h4 {
@@ -48,74 +55,98 @@ const Author = styled.div`
 `;
 
 function App() {
+  const currentUser = "Marcus";
+  const [pins, setPins] = useState([]);
   const [viewState, setViewState] = useState({
     longitude: 17,
     latitude: 46,
     zoom: 4,
   });
-  const [showPopup, setShowPopup] = useState(false);
+  const [selectedPin, setSelectedPin] = useState(null);
+
+  useEffect(() => {
+    const getPins = async () => {
+      try {
+        const res = await axios.get("/pins");
+        setPins(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getPins();
+  }, []);
+
+  const handleMarkerClick = (id) => {
+    setSelectedPin(id);
+  };
 
   return (
     <Map
-      initialViewState={viewState}
+      {...viewState}
+      onMove={(evt) => setViewState(evt.viewState)}
       style={{ width: "100vw", height: "100vh" }}
       mapStyle="mapbox://styles/jaruno/cl30wxtir007315p5ut8yvqpp"
       mapboxAccessToken={process.env.REACT_APP_MAPBOX}
     >
-      <Marker
-        longitude={2.294694}
-        latitude={48.858093}
-        offsetLeft={-20}
-        offsetTop={-10}
-        onClick={(e) => {
-          // If we let the click event propagates to the map, it will immediately close the popup
-          // with `closeOnClick: true`
-          e.originalEvent.stopPropagation();
-          setShowPopup(!showPopup);
-        }}
-      >
-        <RoomRoundedIcon
-          sx={{
-            color: "#417D7A",
-            fontSize: viewState.zoom * 7,
-            "&:hover": {
-              transform: "scale(1.1)",
-              cursor: "pointer",
-              filter: "brightness(1.5)",
-            },
-          }}
-        />
-      </Marker>
-      {showPopup && (
-        <Popup
-          longitude={2.294694}
-          latitude={48.858093}
-          anchor="bottom-right"
-          focusAfterOpen={false}
-          closeOnClick={true}
-          offsetTop={-10}
-          offsetLeft={-20}
-        >
-          <Card>
-            <label>Place</label>
-            <h4>Eiffell Tower</h4>
-            <label>Review</label>
-            <p>Beautiful place. I like it.</p>
-            <label>Rating</label>
-            <div>
-              <Star style={{ color: "gold" }} />
-              <Star style={{ color: "gold" }} />
-              <Star style={{ color: "gold" }} />
-              <Star style={{ color: "gold" }} />
-              <Star style={{ color: "gold" }} />
-            </div>
-            <Author>
-              Created by<b>&nbsp;Mille</b>
-            </Author>
-            <span>1 hour ago</span>
-          </Card>
-        </Popup>
-      )}
+      {pins.map((pin) => (
+        <div key={pin._id}>
+          <Marker
+            theme={theme}
+            longitude={pin.lon}
+            latitude={pin.lat}
+            offsetLeft={-20}
+            offsetTop={-10}
+            onClick={(e) => {
+              // If we let the click event propagates to the map, it will immediately close the popup
+              // with `closeOnClick: true`
+              e.originalEvent.stopPropagation();
+              handleMarkerClick(pin._id);
+            }}
+          >
+            <RoomRoundedIcon
+              sx={{
+                color: currentUser === pin.name ? theme.author : theme.users,
+                fontSize: viewState.zoom * 7,
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  cursor: "pointer",
+                  filter: "brightness(1.5)",
+                },
+              }}
+            />
+          </Marker>
+          {pin._id === selectedPin && (
+            <Popup
+              longitude={pin.lon}
+              latitude={pin.lat}
+              anchor="bottom-right"
+              focusAfterOpen={false}
+              onClose={() => setSelectedPin(null)}
+              offsetTop={-10}
+              offsetLeft={-20}
+            >
+              <Card theme={theme}>
+                <label>Place</label>
+                <h4>{pin.title}</h4>
+                <label>Review</label>
+                <p>{pin.description}</p>
+                <label>Rating</label>
+                <div>
+                  <Star style={{ color: "gold" }} />
+                  <Star style={{ color: "gold" }} />
+                  <Star style={{ color: "gold" }} />
+                  <Star style={{ color: "gold" }} />
+                  <Star style={{ color: "gold" }} />
+                </div>
+                <Author>
+                  Created by<b>&nbsp;{pin.name}</b>
+                </Author>
+                <span>{format(pin.createdAt)}</span>
+              </Card>
+            </Popup>
+          )}
+        </div>
+      ))}
     </Map>
   );
 }

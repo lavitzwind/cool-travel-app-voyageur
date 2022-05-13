@@ -10,6 +10,7 @@ import Star from "@mui/icons-material/Star";
 const theme = {
   author: "Crimson",
   users: "DarkBlue",
+  rating: "Gold",
 };
 
 const Card = styled.div`
@@ -74,8 +75,6 @@ const Form = styled.form`
     border: none;
     outline: none;
     margin-bottom: 5px;
-    border-bottom: 3px solid;
-    border-color: black;
     width: 50%;
     display: flex;
     align-items: center;
@@ -132,6 +131,9 @@ function App() {
   const [selectedPin, setSelectedPin] = useState(null);
   const [location, setLocation] = useState(null);
   const mapRef = useRef();
+  const titleRef = useRef();
+  const descRef = useRef();
+  const ratingRef = useRef();
 
   useEffect(() => {
     const getPins = async () => {
@@ -156,9 +158,32 @@ function App() {
     setLocation({ lat: lat, lon: lng });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newPin = {
+      name: currentUser,
+      title: titleRef.current.value,
+      description: descRef.current.value,
+      rating: ratingRef.current.value,
+      lat: location.lat,
+      lon: location.lon,
+    };
+    try {
+      const res = await axios.post("/pins", newPin);
+      setPins([...pins, res.data]);
+      setLocation(null);
+      setSelectedPin(res.data._id);
+      mapRef.current?.flyTo({
+        center: [location.lon, location.lat],
+        duration: 2002,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Map
-      ref={mapRef}
       {...viewState}
       onMove={(evt) => setViewState(evt.viewState)}
       style={{ width: "100vw", height: "100vh" }}
@@ -167,6 +192,7 @@ function App() {
       onDblClick={(e) => {
         handleAddClick(e);
       }}
+      ref={mapRef}
     >
       {pins.map((pin) => (
         <div key={pin._id}>
@@ -174,8 +200,8 @@ function App() {
             theme={theme}
             longitude={pin.lon}
             latitude={pin.lat}
-            offsetLeft={-20}
-            offsetTop={-10}
+            offsetLeft={-viewState.zoom * 3.5}
+            offsetTop={-viewState.zoom * 7}
             onClick={(e) => {
               // If we let the click event propagates to the map, it will immediately close the popup
               // with `closeOnClick: true`
@@ -213,11 +239,19 @@ function App() {
                 <p>{pin.description}</p>
                 <label>Rating</label>
                 <div>
-                  <Star style={{ color: "gold" }} />
-                  <Star style={{ color: "gold" }} />
-                  <Star style={{ color: "gold" }} />
-                  <Star style={{ color: "gold" }} />
-                  <Star style={{ color: "gold" }} />
+                  {[...Array(pin.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      sx={{
+                        color: theme.rating,
+                        "&:hover": {
+                          transform: "scale(1.1)",
+                          cursor: "pointer",
+                          filter: "brightness(1.5)",
+                        },
+                      }}
+                    />
+                  ))}
                 </div>
                 <Author>
                   Created by<b>&nbsp;{pin.name}</b>
@@ -226,7 +260,7 @@ function App() {
               </Card>
             </Popup>
           )}
-          {location?.lon && (
+          {location && (
             <Popup
               longitude={location.lon}
               latitude={location.lat}
@@ -237,17 +271,18 @@ function App() {
               offsetTop={-10}
               offsetLeft={-20}
             >
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <label>Title</label>
-                <input placeholder="Enter a title" />
+                <input placeholder="Enter a title" ref={titleRef} />
                 <label>Review</label>
                 <textarea
                   placeholder="Say us something about this place."
                   rows="5"
                   cols="25"
+                  ref={descRef}
                 />
                 <label>Rating</label>
-                <select>
+                <select ref={ratingRef}>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>

@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useState, useRef } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   width: 100vw;
@@ -48,7 +50,7 @@ const SignUp = styled.div`
   backdrop-filter: blur(10px);
   visibility: visible;
 
-  div {
+  h2 {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
@@ -61,7 +63,7 @@ const SignUp = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     width: 100%;
     height: 100%;
 
@@ -88,7 +90,7 @@ const SignUp = styled.div`
       border-radius: 20px;
       font-size: 1.2rem;
       padding: 7px 5px;
-      margin: 20px 0;
+      margin: 20px 0 5px 0;
 
       &:hover {
         background-color: #ccc;
@@ -96,10 +98,45 @@ const SignUp = styled.div`
         transition: 0.2s ease-in-out;
       }
     }
+
+    span {
+      color: rgb(203, 56, 11);
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-align: center;
+    }
   }
 `;
 
 const Register = () => {
+  const [loginError, setLoginError] = useState(false);
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const emailRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+    const email = emailRef.current.value;
+
+    if (!username || !password || !email) {
+      setLoginError(true);
+      return;
+    }
+
+    try {
+      await axios.post("/api/register", {
+        username,
+        password,
+        email,
+      });
+      setLoginError(false);
+    } catch (err) {
+      setLoginError(true);
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -107,12 +144,32 @@ const Register = () => {
           <source src="assets/bg.mp4" type="video/mp4" />
         </video>
         <SignUp>
-          <div>Voyageur</div>
-          <form>
-            <input type="text" placeholder="username" />
-            <input type="email" placeholder="email" />
-            <input type="password" placeholder="password" />
+          <h2>Voyageur</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="username"
+              autocomplete="off"
+              ref={usernameRef}
+            />
+            <input
+              type="email"
+              placeholder="email"
+              autocomplete="off"
+              ref={emailRef}
+            />
+            <input
+              type="password"
+              placeholder="password"
+              autocomplete="off"
+              ref={passwordRef}
+            />
             <button>Register</button>
+            {loginError && (
+              <span>
+                Something went wrong. Please check for typos and try again.
+              </span>
+            )}
           </form>
         </SignUp>
       </Wrapper>

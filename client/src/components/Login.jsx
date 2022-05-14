@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -61,7 +62,7 @@ const SignUp = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     width: 100%;
     height: 100%;
 
@@ -113,6 +114,22 @@ const Register = () => {
             <input type="password" placeholder="password" />
             <button>Login</button>
           </form>
+          <p>
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              style={{
+                textDecoration: "none",
+                color: "lightblue",
+                fontWeight: "bold",
+                letterSpacing: "0.1rem",
+                transition: "0.3s ease-in-out",
+                marginLeft: "5px",
+              }}
+            >
+              Sign up
+            </Link>
+          </p>
         </SignUp>
       </Wrapper>
     </Container>

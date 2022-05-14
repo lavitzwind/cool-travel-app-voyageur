@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -42,7 +43,7 @@ const ItemLeft = styled.div`
       height: 100%;
       margin-right: 20px;
 
-      a {
+      h1 {
         color: #fff;
         font-size: 2rem;
         font-weight: bold;
@@ -109,7 +110,7 @@ const ItemRight = styled.div`
         cursor: pointer;
       }
     }
-    a {
+    p {
       color: #fff;
       font-size: 0.8rem;
       font-weight: bold;
@@ -144,7 +145,7 @@ const ItemRight = styled.div`
       }
     }
 
-    a {
+    p {
       color: #000;
       font-size: 0.9rem;
       font-weight: bold;
@@ -162,7 +163,14 @@ const Navbar = () => {
         <ItemLeft>
           <ul>
             <li>
-              <a href="/">Voyageur</a>
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                <h1>Voyageur</h1>
+              </Link>
             </li>
           </ul>
         </ItemLeft>
@@ -170,13 +178,31 @@ const Navbar = () => {
           <ul>
             <li>
               <button>
-                <LoginIcon />
-                <a href="/">Log in</a>
+                <Link
+                  to="/login"
+                  style={{
+                    textDecoration: "none",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "#fff",
+                  }}
+                >
+                  <LoginIcon />
+                  <p>Log in</p>
+                </Link>
               </button>
             </li>
             <li>
               <button>
-                <a href="/">Sign up</a>
+                <Link
+                  to="/signup"
+                  style={{
+                    textDecoration: "none",
+                  }}
+                >
+                  <p>Sign up</p>
+                </Link>
               </button>
             </li>
           </ul>

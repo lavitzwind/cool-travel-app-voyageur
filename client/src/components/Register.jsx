@@ -110,30 +110,40 @@ const SignUp = styled.div`
 
 const Register = () => {
   const [loginError, setLoginError] = useState(false);
+  const [userExists, setUserExists] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const usernameRef = useRef();
   const passwordRef = useRef();
   const emailRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
-    const email = emailRef.current.value;
-
-    if (!username || !password || !email) {
-      setLoginError(true);
-      return;
-    }
+    const newUser = {
+      username: usernameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
 
     try {
-      await axios.post("/api/register", {
-        username,
-        password,
-        email,
-      });
+      await axios.post("/users/register", newUser);
       setLoginError(false);
     } catch (err) {
-      setLoginError(true);
+      console.log(err);
+      if (err.response.data === "User already exists") {
+        setUserExists(true);
+        setPasswordError(false);
+        setLoginError(false);
+      } else if (
+        err.response.data === "Password must be at least 6 characters"
+      ) {
+        setPasswordError(true);
+        setUserExists(false);
+        setLoginError(false);
+      } else {
+        setLoginError(true);
+        setPasswordError(false);
+        setUserExists(false);
+      }
     }
   };
 
@@ -149,19 +159,19 @@ const Register = () => {
             <input
               type="text"
               placeholder="username"
-              autocomplete="off"
+              autoComplete="off"
               ref={usernameRef}
             />
             <input
               type="email"
               placeholder="email"
-              autocomplete="off"
+              autoComplete="off"
               ref={emailRef}
             />
             <input
               type="password"
               placeholder="password"
-              autocomplete="off"
+              autoComplete="off"
               ref={passwordRef}
             />
             <button>Register</button>
@@ -169,6 +179,10 @@ const Register = () => {
               <span>
                 Something went wrong. Please check for typos and try again.
               </span>
+            )}
+            {userExists && <span>User already exist</span>}
+            {passwordError && (
+              <span>Password must be at least 6 characters</span>
             )}
           </form>
         </SignUp>

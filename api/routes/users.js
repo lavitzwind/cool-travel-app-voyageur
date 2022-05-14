@@ -8,18 +8,33 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    // Generate new password
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(req.body.password, salt);
+    const { username, email, password } = req.body;
+    const user = await User.findOne({ username });
+    const emailUser = await User.findOne({ email });
 
-    // Create new user
+    if (user) {
+      res.status(400).send("User already exists");
+      return;
+    }
+
+    if (emailUser) {
+      res.status(400).send("User already exists");
+      return;
+    }
+
+    if (password.length < 6) {
+      res.status(400).json("Password must be at least 6 characters");
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hash,
+      username,
+      email,
+      password: hashedPassword,
     });
 
-    // Save user
     const savedUser = await newUser.save();
     res.status(200).json(savedUser._id);
   } catch (err) {

@@ -1,6 +1,7 @@
-import styled from "styled-components";
 import { useState, useRef } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   width: 100vw;
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.5);
+    filter: brightness(0.4);
     z-index: 0;
   }
 `;
@@ -112,6 +113,7 @@ const Register = () => {
   const [loginError, setLoginError] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const usernameRef = useRef();
   const passwordRef = useRef();
   const emailRef = useRef();
@@ -125,10 +127,13 @@ const Register = () => {
     };
 
     try {
+      setIsLoading(true);
       await axios.post("/users/register", newUser);
       setLoginError(false);
+      setUserExists(false);
+      setPasswordError(false);
+      setIsLoading(false);
     } catch (err) {
-      console.log(err);
       if (err.response.data === "User already exists") {
         setUserExists(true);
         setPasswordError(false);
@@ -174,7 +179,17 @@ const Register = () => {
               autoComplete="off"
               ref={passwordRef}
             />
-            <button>Register</button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+            >
+              {isLoading ? (
+                <CircularProgress size={20} style={{ color: "black" }} />
+              ) : (
+                "Login"
+              )}
+            </button>
             {loginError && (
               <span>
                 Something went wrong. Please check for typos and try again.

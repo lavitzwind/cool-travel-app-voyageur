@@ -1,5 +1,9 @@
-import styled from "styled-components";
+import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
+import { loginCall } from "../apiCalls";
+import { AuthContext } from "../context/AuthContext";
+import styled from "styled-components";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   width: 100vw;
@@ -93,14 +97,25 @@ const SignUp = styled.div`
 
       &:hover {
         background-color: #ccc;
-        cursor: pointer;
         transition: 0.2s ease-in-out;
       }
     }
   }
 `;
 
-const Register = () => {
+const Login = () => {
+  const { isFetching, dispatch } = useContext(AuthContext);
+  const username = useRef();
+  const password = useRef();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    loginCall(
+      { username: username.current.value, password: password.current.value },
+      dispatch
+    );
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -109,10 +124,20 @@ const Register = () => {
         </video>
         <SignUp>
           <div>Voyageur</div>
-          <form>
-            <input type="text" placeholder="username" />
-            <input type="password" placeholder="password" />
-            <button>Login</button>
+          <form onSubmit={handleClick}>
+            <input type="text" placeholder="username" ref={username} />
+            <input type="password" placeholder="password" ref={password} />
+            <button
+              type="submit"
+              disabled={isFetching}
+              style={{ cursor: isFetching ? "not-allowed" : "pointer" }}
+            >
+              {isFetching ? (
+                <CircularProgress size={20} style={{ color: "black" }} />
+              ) : (
+                "Login"
+              )}
+            </button>
           </form>
           <p>
             Don't have an account?{" "}
@@ -136,4 +161,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

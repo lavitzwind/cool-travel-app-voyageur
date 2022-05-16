@@ -6,9 +6,9 @@ import styled from "styled-components";
 import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  background-color: #ccc;
+  background-color: #000;
 `;
 
 const Wrapper = styled.div`

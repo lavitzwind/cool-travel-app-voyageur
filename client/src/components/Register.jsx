@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -117,6 +118,7 @@ const Register = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const emailRef = useRef();
+  let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -133,6 +135,7 @@ const Register = () => {
       setUserExists(false);
       setPasswordError(false);
       setIsLoading(false);
+      navigate("/login");
     } catch (err) {
       if (err.response.data === "User already exists") {
         setUserExists(true);
@@ -187,7 +190,7 @@ const Register = () => {
               {isLoading ? (
                 <CircularProgress size={20} style={{ color: "black" }} />
               ) : (
-                "Login"
+                "Register"
               )}
             </button>
             {loginError && (

@@ -104,7 +104,7 @@ const SignUp = styled.div`
 `;
 
 const Login = () => {
-  const { isFetching, dispatch } = useContext(AuthContext);
+  const { isFetching, dispatch, error } = useContext(AuthContext);
   const username = useRef();
   const password = useRef();
 
@@ -139,6 +139,11 @@ const Login = () => {
               )}
             </button>
           </form>
+          {error && (
+            <span style={{ color: "red", margin: "0 0 20px 10px" }}>
+              Username or password is incorrect
+            </span>
+          )}
           <p>
             Don't have an account?
             <Link

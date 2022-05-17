@@ -9,6 +9,7 @@ import Star from "@mui/icons-material/Star";
 import { AuthContext } from "../context/AuthContext";
 import TransitionPanel from "../components/TransitionPanel";
 import DraggableMarkerPanel from "../components/DraggableMarkerPanel";
+import { CircularProgress } from "@mui/material";
 
 const theme = {
   author: "Crimson",
@@ -50,6 +51,23 @@ const Card = styled.div`
     width: 100%;
     height: 20px;
     margin-bottom: 5px;
+  }
+
+  button {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: ${(props) => props.theme.author};
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 0;
+
+    &:hover {
+      color: ${(props) => props.theme.author};
+      cursor: pointer;
+    }
   }
 `;
 
@@ -161,6 +179,7 @@ function Home() {
   const [selectedPin, setSelectedPin] = useState(null);
   const [location, setLocation] = useState(null);
   const [draggableMarker, setDraggableMarker] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const mapRef = useRef();
   const titleRef = useRef();
   const descRef = useRef();
@@ -302,6 +321,29 @@ function Home() {
                     Created by<b>&nbsp;{pin.name}</b>
                   </Author>
                   <span>{format(pin.createdAt)}</span>
+                  {currentUser === pin.name && (
+                    <button
+                      onClick={async () => {
+                        try {
+                          setIsLoading(true);
+                          await axios.delete(`/pins/${pin._id}`);
+                          setPins(pins.filter((p) => p._id !== pin._id));
+                          setIsLoading(false);
+                        } catch (err) {
+                          console.log(err);
+                          setIsLoading(false);
+                        }
+                      }}
+                    >
+                      {isloading && (
+                        <CircularProgress
+                          size={20}
+                          style={{ color: `${theme.author}` }}
+                        />
+                      )}
+                      Delete Location
+                    </button>
+                  )}
                 </Card>
               </Popup>
             )}

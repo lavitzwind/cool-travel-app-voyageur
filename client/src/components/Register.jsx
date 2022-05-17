@@ -5,9 +5,9 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  background-color: #ccc;
+  background-color: #000;
 `;
 
 const Wrapper = styled.div`

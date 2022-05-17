@@ -53,6 +53,7 @@ const Wrapper = styled.div`
     a:last-child {
       color: #fff;
       text-decoration: none;
+      letter-spacing: 0.1rem;
       margin-left: 5px;
     }
   }

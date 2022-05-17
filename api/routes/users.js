@@ -50,6 +50,7 @@ router.post("/login", async (req, res) => {
   try {
     // Find user
     const user = await User.findOne({ username: req.body.username });
+
     if (!user) {
       res.status(401).json({ message: "Wrong username or password!" });
     } else {

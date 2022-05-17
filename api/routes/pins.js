@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Delete a pin
+// Delete pin
 router.delete("/:id", async (req, res) => {
   try {
     const removedPin = await Pin.remove({ _id: req.params.id });

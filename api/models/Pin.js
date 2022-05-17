@@ -30,6 +30,10 @@ const PinSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    userId: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

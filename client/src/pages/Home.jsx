@@ -170,6 +170,7 @@ const Logout = styled.button`
 function Home() {
   const { user } = useContext(AuthContext);
   const currentUser = user.username;
+  const userId = parseInt(user._id);
   const [pins, setPins] = useState([]);
   const [viewState, setViewState] = useState({
     longitude: -39.462891,
@@ -203,7 +204,6 @@ function Home() {
   };
 
   const handleAddClick = (e) => {
-    e.originalEvent.stopPropagation();
     const { lng, lat } = e.lngLat;
     setLocation({ lat: lat, lon: lng });
   };
@@ -217,8 +217,10 @@ function Home() {
       rating: ratingRef.current.value,
       lat: location.lat,
       lon: location.lon,
+      userId: userId,
     };
     try {
+      setIsLoading(true);
       const res = await axios.post("/pins", newPin);
       setPins([...pins, res.data]);
       setLocation(null);
@@ -227,8 +229,10 @@ function Home() {
         center: [location.lon, location.lat],
         duration: 2002,
       });
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
 
@@ -275,7 +279,10 @@ function Home() {
             >
               <RoomRoundedIcon
                 sx={{
-                  color: currentUser === pin.name ? theme.author : theme.users,
+                  color:
+                    currentUser === pin.name && userId === pin.userId
+                      ? theme.author
+                      : theme.users,
                   fontSize: viewState.zoom * 7,
                   "&:hover": {
                     transform: "scale(1.1)",
@@ -321,7 +328,7 @@ function Home() {
                     Created by<b>&nbsp;{pin.name}</b>
                   </Author>
                   <span>{format(pin.createdAt)}</span>
-                  {currentUser === pin.name && (
+                  {currentUser === pin.name && userId === pin.userId && (
                     <button
                       onClick={async () => {
                         try {
@@ -347,41 +354,49 @@ function Home() {
                 </Card>
               </Popup>
             )}
-            {location && (
-              <Popup
-                longitude={location.lon}
-                latitude={location.lat}
-                anchor="bottom-right"
-                focusAfterOpen={false}
-                closeOnClick={true}
-                onClose={() => setLocation(null)}
-                offsetTop={-10}
-                offsetLeft={-20}
-              >
-                <Form onSubmit={handleSubmit}>
-                  <label>Title</label>
-                  <input placeholder="Enter a title" ref={titleRef} />
-                  <label>Review</label>
-                  <textarea
-                    placeholder="Say us something about this place."
-                    rows="5"
-                    cols="25"
-                    ref={descRef}
-                  />
-                  <label>Rating</label>
-                  <select ref={ratingRef}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <button type="submit">Add Pin</button>
-                </Form>
-              </Popup>
-            )}
           </div>
         ))}
+        {location && (
+          <Popup
+            longitude={location.lon}
+            latitude={location.lat}
+            anchor="bottom-right"
+            focusAfterOpen={false}
+            closeOnClick={true}
+            onClose={() => setLocation(null)}
+            offsetTop={-10}
+            offsetLeft={-20}
+          >
+            <Form onSubmit={handleSubmit}>
+              <label>Title</label>
+              <input placeholder="Enter a title" ref={titleRef} />
+              <label>Review</label>
+              <textarea
+                placeholder="Say us something about this place."
+                rows="5"
+                cols="25"
+                ref={descRef}
+              />
+              <label>Rating</label>
+              <select ref={ratingRef}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+              <button type="submit">
+                {isloading && (
+                  <CircularProgress
+                    size={20}
+                    style={{ color: `${theme.author}` }}
+                  />
+                )}
+                Add Pin
+              </button>
+            </Form>
+          </Popup>
+        )}
         {draggableMarker && (
           <Marker
             latitude={viewState.latitude}

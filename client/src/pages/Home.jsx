@@ -268,8 +268,7 @@ function Home() {
               theme={theme}
               longitude={pin.lon}
               latitude={pin.lat}
-              offsetLeft={-viewState.zoom * 3.5}
-              offsetTop={-viewState.zoom * 7}
+              offset={[-viewState.zoom * 0, -viewState.zoom * 3]}
               onClick={(e) => {
                 // If we let the click event propagates to the map, it will immediately close the popup
                 // with `closeOnClick: true`

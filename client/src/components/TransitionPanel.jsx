@@ -5,7 +5,7 @@ const Container = styled.div`
   top: calc(10px + 1%);
   right: 0;
   max-width: 320px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 12px 24px;
   margin: 20px;
@@ -36,7 +36,7 @@ const Container = styled.div`
   }
 `;
 
-const ControlPanel = ({ onSelectRegion }) => {
+const TransitionPanel = ({ onSelectRegion }) => {
   return (
     <Container>
       <h3>Camera Transition</h3>
@@ -105,4 +105,4 @@ const ControlPanel = ({ onSelectRegion }) => {
   );
 };
 
-export default ControlPanel;
+export default TransitionPanel;

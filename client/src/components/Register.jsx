@@ -141,16 +141,19 @@ const Register = () => {
         setUserExists(true);
         setPasswordError(false);
         setLoginError(false);
+        setIsLoading(false);
       } else if (
         err.response.data === "Password must be at least 6 characters"
       ) {
         setPasswordError(true);
         setUserExists(false);
         setLoginError(false);
+        setIsLoading(false);
       } else {
         setLoginError(true);
         setPasswordError(false);
         setUserExists(false);
+        setIsLoading(false);
       }
     }
   };
@@ -169,18 +172,21 @@ const Register = () => {
               placeholder="username"
               autoComplete="off"
               ref={usernameRef}
+              required
             />
             <input
               type="email"
               placeholder="email"
               autoComplete="off"
               ref={emailRef}
+              required
             />
             <input
               type="password"
               placeholder="password"
               autoComplete="off"
               ref={passwordRef}
+              required
             />
             <button
               type="submit"

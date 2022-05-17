@@ -125,8 +125,13 @@ const Login = () => {
         <SignUp>
           <div>Voyageur</div>
           <form onSubmit={handleClick}>
-            <input type="text" placeholder="username" ref={username} />
-            <input type="password" placeholder="password" ref={password} />
+            <input type="text" placeholder="username" ref={username} required />
+            <input
+              type="password"
+              placeholder="password"
+              ref={password}
+              required
+            />
             <button
               type="submit"
               disabled={isFetching}

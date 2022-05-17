@@ -14,11 +14,21 @@ router.post("/", async (req, res) => {
   }
 });
 
-//get all pins
+// Get all pins
 router.get("/", async (req, res) => {
   try {
     const pins = await Pin.find();
     res.status(200).json(pins);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Delete a pin
+router.delete("/:id", async (req, res) => {
+  try {
+    const removedPin = await Pin.remove({ _id: req.params.id });
+    res.status(200).json(removedPin);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

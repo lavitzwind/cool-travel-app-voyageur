@@ -7,7 +7,8 @@ import styled from "styled-components";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import Star from "@mui/icons-material/Star";
 import { AuthContext } from "../context/AuthContext";
-import ControlPanel from "../components/ControlPanel";
+import TransitionPanel from "../components/TransitionPanel";
+import DraggableMarkerPanel from "../components/DraggableMarkerPanel";
 
 const theme = {
   author: "Crimson",
@@ -159,6 +160,7 @@ function Home() {
   });
   const [selectedPin, setSelectedPin] = useState(null);
   const [location, setLocation] = useState(null);
+  const [draggableMarker, setDraggableMarker] = useState(false);
   const mapRef = useRef();
   const titleRef = useRef();
   const descRef = useRef();
@@ -216,6 +218,10 @@ function Home() {
     window.location.reload();
   };
 
+  const handleDraggableMarker = () => {
+    setDraggableMarker(!draggableMarker);
+  };
+
   const onSelectRegion = useCallback(({ longitude, latitude }) => {
     mapRef.current?.flyTo({ center: [longitude, latitude], duration: 2000 });
   }, []);
@@ -233,7 +239,6 @@ function Home() {
         }}
         ref={mapRef}
       >
-        <Logout>Log out</Logout>
         {pins.map((pin) => (
           <div key={pin._id}>
             <Marker
@@ -335,9 +340,23 @@ function Home() {
             )}
           </div>
         ))}
+        {draggableMarker && (
+          <Marker
+            latitude={viewState.latitude}
+            longitude={viewState.longitude}
+            draggable={true}
+            color={theme.author}
+            onDragEnd={(e) => {
+              const { lng, lat } = e.lngLat;
+              setLocation({ lat: lat, lon: lng });
+              setDraggableMarker(false);
+            }}
+          ></Marker>
+        )}
       </Map>
       <Logout onClick={handleLogout}>Log out</Logout>
-      <ControlPanel onSelectRegion={onSelectRegion} />
+      <TransitionPanel onSelectRegion={onSelectRegion} />
+      <DraggableMarkerPanel handleDraggableMarker={handleDraggableMarker} />
     </>
   );
 }

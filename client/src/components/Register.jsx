@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   width: 100%;
@@ -51,6 +52,11 @@ const SignUp = styled.div`
   box-shadow: 1px 1px 2.5px #000;
   backdrop-filter: blur(10px);
   visibility: visible;
+  ${mobile({
+    maxWidth: "310px",
+    maxHeight: "380px",
+    padding: "30px",
+  })}
 
   h2 {
     font-size: 2rem;

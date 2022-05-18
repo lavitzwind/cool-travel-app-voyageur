@@ -4,6 +4,7 @@ import { loginCall } from "../apiCalls";
 import { AuthContext } from "../context/AuthContext";
 import styled from "styled-components";
 import { CircularProgress } from "@mui/material";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   width: 100%;
@@ -52,6 +53,11 @@ const SignUp = styled.div`
   box-shadow: 1px 1px 2.5px #000;
   backdrop-filter: blur(10px);
   visibility: visible;
+  ${mobile({
+    maxWidth: "310px",
+    maxHeight: "350px",
+    padding: "30px",
+  })}
 
   div {
     font-size: 2rem;

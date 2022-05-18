@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { tablet, mobile } from "../responsive";
 
 const Container = styled.div`
   position: absolute;
-  top: calc(10px + 1%);
+  top: 50px;
   right: 0;
   max-width: 320px;
   background: rgba(255, 255, 255, 0.7);
@@ -14,9 +15,21 @@ const Container = styled.div`
   color: #6b6b76;
   text-transform: uppercase;
   outline: none;
+  ${tablet({
+    top: "50px",
+    maxWidth: "280px",
+  })}
+  ${mobile({
+    maxWidth: "280px",
+    top: "50px",
+    right: "0px",
+  })}
 
   p {
     margin: 10px 0 10px 0;
+    ${mobile({
+      display: "none",
+    })}
   }
 
   hr {

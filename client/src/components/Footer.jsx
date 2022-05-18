@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   width: 100%;
@@ -20,6 +21,9 @@ const Wrapper = styled.div`
     text-decoration: none;
     letter-spacing: 0.3rem;
     margin-bottom: 20px;
+    ${mobile({
+      textAlign: "center",
+    })}
 
     &:hover {
       color: #fff;
@@ -42,6 +46,12 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: 40px;
+    ${mobile({
+      marginTop: "10px",
+      flexDirection: "column",
+      justifyContent: "center",
+      gap: "20px",
+    })}
 
     a:first-child {
       color: #fff;

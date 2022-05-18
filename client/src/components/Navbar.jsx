@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
 import { Link } from "react-router-dom";
+import { mobile, tablet } from "../responsive";
 
 const Container = styled.div`
   width: 100%;
@@ -34,6 +35,10 @@ const ItemLeft = styled.div`
     align-items: center;
     width: 50%;
     height: 100%;
+    margin-left: 20px;
+    ${mobile({
+      padding: "0 0 0 20px",
+    })}
 
     li {
       display: flex;
@@ -50,6 +55,9 @@ const ItemLeft = styled.div`
         text-decoration: none;
         letter-spacing: 0.3rem;
         transition: 0.3s ease-in-out;
+        ${mobile({
+          fontSize: "1.5rem",
+        })}
 
         &:hover {
           color: #fff;
@@ -69,6 +77,10 @@ const ItemRight = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  margin-right: 15px;
+  ${mobile({
+    width: "90%",
+  })}
 
   ul {
     display: flex;
@@ -78,6 +90,12 @@ const ItemRight = styled.div`
     height: 100%;
     list-style: none;
     gap: 10px;
+    ${tablet({
+      width: "70%",
+    })}
+    ${mobile({
+      width: "100%",
+    })}
 
     li {
       display: flex;
@@ -85,6 +103,9 @@ const ItemRight = styled.div`
       align-items: center;
       width: 100%;
       height: 100%;
+      ${mobile({
+        justifyContent: "flex-end",
+      })}
     }
   }
 
@@ -104,6 +125,11 @@ const ItemRight = styled.div`
       color: #fff;
       padding: 8px 1px;
       font-size: 0.9rem;
+      ${mobile({
+        alignItems: "center",
+        justifyContent: "center",
+        width: "50%",
+      })}
 
       &:hover {
         background-color: grey;
@@ -118,6 +144,9 @@ const ItemRight = styled.div`
       letter-spacing: 0.1rem;
       transition: 0.3s ease-in-out;
       margin-left: 10px;
+      ${mobile({
+        display: "none",
+      })}
     }
   }
 
@@ -137,6 +166,12 @@ const ItemRight = styled.div`
       color: #000;
       padding: 9px 1px;
       font-size: 0.9rem;
+      ${mobile({
+        width: "80px",
+        alignItems: "center",
+        marginRight: "10px",
+        fontSize: "0.8rem",
+      })}
 
       &:hover {
         background-color: #ccc;
@@ -152,6 +187,9 @@ const ItemRight = styled.div`
       text-decoration: none;
       letter-spacing: 0.05rem;
       transition: 0.3s ease-in-out;
+      ${mobile({
+        fontSize: "0.8rem",
+      })}
     }
   }
 `;

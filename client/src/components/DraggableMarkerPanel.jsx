@@ -1,8 +1,11 @@
 import styled from "styled-components";
+import { tablet, mobile } from "../responsive";
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  top: calc(1px + 30%);
+  top: 320px;
   right: 0;
   max-width: 320px;
   background: rgba(255, 255, 255, 0.7);
@@ -14,9 +17,25 @@ const Container = styled.div`
   color: #6b6b76;
   text-transform: uppercase;
   outline: none;
+  ${tablet({
+    maxWidth: "280px",
+    top: "330px",
+  })}
+  ${mobile({
+    maxWidth: "280px",
+    top: "700px",
+    left: "0",
+    right: "0",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "center",
+  })}
 
   p {
     margin: 10px 0 10px 0;
+    ${mobile({
+      display: "none",
+    })}
   }
 
   hr {
@@ -36,6 +55,10 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    ${mobile({
+      width: "90%",
+      margin: "0 auto",
+    })}
 
     &:hover {
       background-color: black;

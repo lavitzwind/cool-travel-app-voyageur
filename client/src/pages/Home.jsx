@@ -10,6 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 import TransitionPanel from "../components/TransitionPanel";
 import DraggableMarkerPanel from "../components/DraggableMarkerPanel";
 import { CircularProgress } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const theme = {
   author: "Crimson",
@@ -167,6 +168,35 @@ const Logout = styled.button`
   }
 `;
 
+const MoreIcon = styled.button`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  top: 40px;
+  right: 10px;
+  color: #000;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    background-color: #ccc;
+    color: #000;
+    border-radius: 50px;
+    transform: scale(1.1);
+    transition: all 0.5s ease-in-out;
+  }
+
+  @media only screen and (max-width: 769px) {
+    display: flex;
+  }
+`;
+
 function Home() {
   const { user } = useContext(AuthContext);
   const currentUser = user.username;
@@ -181,6 +211,7 @@ function Home() {
   const [location, setLocation] = useState(null);
   const [draggableMarker, setDraggableMarker] = useState(false);
   const [isloading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const mapRef = useRef();
   const titleRef = useRef();
   const descRef = useRef();
@@ -411,8 +442,15 @@ function Home() {
         )}
       </Map>
       <Logout onClick={handleLogout}>Log out</Logout>
-      <TransitionPanel onSelectRegion={onSelectRegion} />
-      <DraggableMarkerPanel handleDraggableMarker={handleDraggableMarker} />
+      <MoreIcon onClick={() => setOpen(!open)}>
+        <MoreVertIcon />
+      </MoreIcon>
+      {!open && (
+        <>
+          <TransitionPanel onSelectRegion={onSelectRegion} />
+          <DraggableMarkerPanel handleDraggableMarker={handleDraggableMarker} />
+        </>
+      )}
     </>
   );
 }

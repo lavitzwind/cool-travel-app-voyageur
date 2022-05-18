@@ -30,6 +30,11 @@ const Container = styled.div`
     ${mobile({
       display: "none",
     })}
+    span {
+      ${tablet({
+        display: "none",
+      })}
+    }
   }
 
   hr {
@@ -54,7 +59,8 @@ const TransitionPanel = ({ onSelectRegion }) => {
     <Container>
       <h3>Camera Transition</h3>
       <p>
-        Select a location on the map to fly to it. You can also use the mouse.
+        Select a location on the map to fly to it.
+        <span>You can also use the mouse.</span>
       </p>
       <hr />
       <div>

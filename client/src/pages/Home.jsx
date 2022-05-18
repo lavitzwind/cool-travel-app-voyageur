@@ -288,9 +288,7 @@ function Home() {
         style={{ width: "100vw", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
-        onDblClick={(e) => {
-          handleAddClick(e);
-        }}
+        onDblClick={(e) => handleAddClick(e)}
         ref={mapRef}
       >
         {pins.map((pin) => (

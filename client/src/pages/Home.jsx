@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext, useCallback } from "react";
-import axios from "axios";
+import { axiosInstance } from "../config";
 import { format } from "timeago.js";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -220,7 +220,7 @@ function Home() {
   useEffect(() => {
     const getPins = async () => {
       try {
-        const res = await axios.get("/pins");
+        const res = await axiosInstance.get("/pins");
         setPins(res.data);
       } catch (err) {
         console.log(err);
@@ -252,7 +252,7 @@ function Home() {
     };
     try {
       setIsLoading(true);
-      const res = await axios.post("/pins", newPin);
+      const res = await axiosInstance.post("/pins", newPin);
       setPins([...pins, res.data]);
       setLocation(null);
       setSelectedPin(res.data._id);
@@ -361,7 +361,7 @@ function Home() {
                       onClick={async () => {
                         try {
                           setIsLoading(true);
-                          await axios.delete(`/pins/${pin._id}`);
+                          await axiosInstance.delete(`/pins/${pin._id}`);
                           setPins(pins.filter((p) => p._id !== pin._id));
                           setIsLoading(false);
                         } catch (err) {

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import axios from "axios";
+import { axiosInstance } from "../config";
 import styled from "styled-components";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -136,7 +136,7 @@ const Register = () => {
 
     try {
       setIsLoading(true);
-      await axios.post("/users/register", newUser);
+      await axiosInstance.post("/users/register", newUser);
       setLoginError(false);
       setUserExists(false);
       setPasswordError(false);

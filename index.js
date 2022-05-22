@@ -4,11 +4,15 @@ import dotenv from "dotenv";
 import pinRoute from "./routes/pins.js";
 import userRoute from "./routes/users.js";
 import cors from "cors";
+import path from "path";
+import morgan from "morgan";
+
 const app = express();
 
 dotenv.config();
-
+app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 mongoose
@@ -25,7 +29,20 @@ mongoose
 
 app.use("/api/pins", pinRoute);
 app.use("/api/users", userRoute);
+app.use(express.static(path.join(__dirname, "./client/build")));
 
-app.listen(process.env.PORT || 8800, () => {
-  console.log("Server is running on port 8800");
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

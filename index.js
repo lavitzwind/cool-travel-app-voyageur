@@ -6,11 +6,14 @@ import userRoute from "./routes/users.js";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
+import helmet from "helmet";
 
 const app = express();
 
 dotenv.config();
-app.use(morgan("dev"));
+
+app.use(helmet());
+app.use(morgan("common"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());

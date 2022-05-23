@@ -9,7 +9,7 @@ function App() {
   const { user } = useContext(AuthContext);
 
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={!user ? <Navigate to="/login" /> : <Home />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />

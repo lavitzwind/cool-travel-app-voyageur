@@ -23,7 +23,7 @@ const Container = styled.div`
   })}
   ${mobile({
     maxWidth: "280px",
-    top: "calc(100vh - 150px)",
+    top: "calc(100vh - 190px)",
     left: "0",
     right: "0",
     marginLeft: "auto",
